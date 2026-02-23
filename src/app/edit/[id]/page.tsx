@@ -42,6 +42,7 @@ export default function EditItemPage({ params }: { params: Promise<{ id: string 
     updateItem(id, {
       name: data.name,
       category: data.category as Category,
+      subcategory: data.subcategory || undefined,
       purchasePrice: dollarsToCents(data.purchasePrice),
       currentValue: dollarsToCents(data.currentValue),
       purchaseDate: data.purchaseDate,
@@ -61,6 +62,7 @@ export default function EditItemPage({ params }: { params: Promise<{ id: string 
         defaultValues={{
           name: item.name,
           category: item.category,
+          subcategory: item.subcategory ?? "",
           purchasePrice: (item.purchasePrice / 100).toFixed(2),
           currentValue: (item.currentValue / 100).toFixed(2),
           purchaseDate: item.purchaseDate,

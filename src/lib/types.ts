@@ -1,4 +1,11 @@
-export type Category = "video-game" | "console" | "trading-card" | "movie";
+export type Category =
+  | "video-game"
+  | "trading-card"
+  | "comic"
+  | "funko-pop"
+  | "lego-set"
+  | "coin"
+  | "sports-card";
 
 export type Condition =
   | "mint"
@@ -12,6 +19,7 @@ export interface CollectionItem {
   id: string;
   name: string;
   category: Category;
+  subcategory?: string;
   purchasePrice: number; // cents
   currentValue: number; // cents
   purchaseDate: string; // ISO date string
@@ -23,10 +31,13 @@ export interface CollectionItem {
 }
 
 export const categoryLabels: Record<Category, string> = {
-  "video-game": "Video Game",
-  console: "Console",
-  "trading-card": "Trading Card",
-  movie: "Movie",
+  "video-game": "Video Games",
+  "trading-card": "Trading Cards",
+  comic: "Comics",
+  "funko-pop": "Funko Pops",
+  "lego-set": "LEGO Sets",
+  coin: "Coins",
+  "sports-card": "Sports Cards",
 };
 
 export const conditionLabels: Record<Condition, string> = {
@@ -40,9 +51,12 @@ export const conditionLabels: Record<Condition, string> = {
 
 export const categories: Category[] = [
   "video-game",
-  "console",
   "trading-card",
-  "movie",
+  "comic",
+  "funko-pop",
+  "lego-set",
+  "coin",
+  "sports-card",
 ];
 
 export const conditions: Condition[] = [

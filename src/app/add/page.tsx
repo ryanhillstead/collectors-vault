@@ -15,6 +15,7 @@ export default function AddItemPage() {
     addItem({
       name: data.name,
       category: data.category as Category,
+      subcategory: data.subcategory || undefined,
       purchasePrice: dollarsToCents(data.purchasePrice),
       currentValue: dollarsToCents(data.currentValue),
       purchaseDate: data.purchaseDate,

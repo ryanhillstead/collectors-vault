@@ -50,9 +50,12 @@ export function useCollection() {
     totalValue: items.reduce((sum, item) => sum + item.currentValue, 0),
     byCategory: {
       "video-game": items.filter((i) => i.category === "video-game").length,
-      console: items.filter((i) => i.category === "console").length,
       "trading-card": items.filter((i) => i.category === "trading-card").length,
-      movie: items.filter((i) => i.category === "movie").length,
+      comic: items.filter((i) => i.category === "comic").length,
+      "funko-pop": items.filter((i) => i.category === "funko-pop").length,
+      "lego-set": items.filter((i) => i.category === "lego-set").length,
+      coin: items.filter((i) => i.category === "coin").length,
+      "sports-card": items.filter((i) => i.category === "sports-card").length,
     },
   };
 

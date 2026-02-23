@@ -7,6 +7,7 @@ import { formatCurrency, formatDate } from "@/lib/utils";
 import { EmptyState } from "@/components/shared/empty-state";
 import { LoadingSkeleton } from "@/components/shared/loading-skeleton";
 import { CategoryBadge } from "@/components/shared/category-badge";
+import { CollectionChart } from "@/components/shared/collection-chart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ItemImage } from "@/components/shared/item-image";
 
@@ -78,23 +79,29 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      <div className="mb-8">
-        <h2 className="mb-4 text-lg font-semibold">By Category</h2>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {categories.map((cat) => (
-            <Card key={cat}>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">
-                  {categoryLabels[cat]}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-2xl font-bold">{stats.byCategory[cat]}</p>
-              </CardContent>
-            </Card>
-          ))}
+      <CollectionChart items={items} />
+
+      {categories.some((cat) => stats.byCategory[cat] > 0) && (
+        <div className="mb-8">
+          <h2 className="mb-4 text-lg font-semibold">By Category</h2>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {categories
+              .filter((cat) => stats.byCategory[cat] > 0)
+              .map((cat) => (
+                <Card key={cat}>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium text-muted-foreground">
+                      {categoryLabels[cat]}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-2xl font-bold">{stats.byCategory[cat]}</p>
+                  </CardContent>
+                </Card>
+              ))}
+          </div>
         </div>
-      </div>
+      )}
 
       <div>
         <h2 className="mb-4 text-lg font-semibold">Recently Added</h2>

@@ -2,9 +2,11 @@ import { z } from "zod";
 
 export const itemFormSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  category: z.enum(["video-game", "console", "trading-card", "movie"], {
-    message: "Category is required",
-  }),
+  category: z.enum(
+    ["video-game", "trading-card", "comic", "funko-pop", "lego-set", "coin", "sports-card"],
+    { message: "Category is required" }
+  ),
+  subcategory: z.string().optional(),
   purchasePrice: z
     .string()
     .min(1, "Purchase price is required")
