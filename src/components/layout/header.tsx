@@ -12,6 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Logo } from "@/components/layout/logo";
 
 const navLinks = [
   { href: "/", label: "Dashboard" },
@@ -25,10 +26,8 @@ export function Header() {
 
   return (
     <header className="border-b">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <Link href="/" className="text-xl font-bold">
-          Collector&apos;s Vault
-        </Link>
+      <div className="container mx-auto flex items-center justify-between px-4 py-2">
+        <Logo />
         <div className="flex items-center gap-6">
           <nav className="flex gap-6">
             {navLinks.map((link) => (

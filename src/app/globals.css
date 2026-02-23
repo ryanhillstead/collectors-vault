@@ -124,3 +124,13 @@
     @apply bg-background text-foreground;
   }
 }
+
+.logo-text {
+  font-family: var(--font-lilita);
+  color: #FFE234;
+  -webkit-text-stroke: 3.5px #0D1B2A;
+  paint-order: stroke fill;
+  text-shadow: 3px 4px 0 rgba(13, 27, 42, 0.5);
+  line-height: 1;
+  display: block;
+}
