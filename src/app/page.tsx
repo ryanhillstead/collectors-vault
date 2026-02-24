@@ -77,6 +77,21 @@ export default function DashboardPage() {
             </p>
           </CardContent>
         </Card>
+        {stats.soldItems > 0 && (
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Realized Gains
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className={`text-2xl font-bold ${stats.realizedGains >= 0 ? "text-green-600" : "text-red-600"}`}>
+                {stats.realizedGains >= 0 ? "+" : ""}{formatCurrency(stats.realizedGains)}
+              </p>
+              <p className="text-xs text-muted-foreground">{stats.soldItems} item{stats.soldItems !== 1 ? "s" : ""} sold</p>
+            </CardContent>
+          </Card>
+        )}
       </div>
 
       <CollectionChart items={items} />

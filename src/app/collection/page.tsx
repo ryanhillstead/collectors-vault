@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/table";
 import { Card, CardContent } from "@/components/ui/card";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Badge } from "@/components/ui/badge";
 
 type SortKey = "name" | "purchasePrice" | "currentValue" | "createdAt";
 type ViewMode = "table" | "grid" | "list";
@@ -47,6 +48,7 @@ export default function CollectionPage() {
   const [conditionFilter, setConditionFilter] = useState<string>("all");
   const [sortBy, setSortBy] = useState<SortKey>("createdAt");
   const [viewMode, setViewMode] = useState<ViewMode>("table");
+  const [showSold, setShowSold] = useState(false);
 
   useEffect(() => {
     setViewMode(getStoredViewMode());
@@ -59,8 +61,10 @@ export default function CollectionPage() {
     }
   }
 
+  const hasSoldItems = items.some((i) => i.soldPrice !== undefined);
+
   const filtered = useMemo(() => {
-    let result = items;
+    let result = showSold ? items : items.filter((i) => i.soldPrice === undefined);
 
     if (search) {
       const q = search.toLowerCase();
@@ -91,17 +95,27 @@ export default function CollectionPage() {
     <div>
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold">Collection</h1>
-        <ToggleGroup type="single" value={viewMode} onValueChange={handleViewModeChange}>
-          <ToggleGroupItem value="table" aria-label="Table view">
-            <Table2 className="h-4 w-4" />
-          </ToggleGroupItem>
-          <ToggleGroupItem value="grid" aria-label="Grid view">
-            <LayoutGrid className="h-4 w-4" />
-          </ToggleGroupItem>
-          <ToggleGroupItem value="list" aria-label="List view">
-            <LayoutList className="h-4 w-4" />
-          </ToggleGroupItem>
-        </ToggleGroup>
+        <div className="flex items-center gap-3">
+          {hasSoldItems && (
+            <button
+              onClick={() => setShowSold((v) => !v)}
+              className="text-sm text-muted-foreground underline-offset-4 hover:underline"
+            >
+              {showSold ? "Hide sold items" : "Show sold items"}
+            </button>
+          )}
+          <ToggleGroup type="single" value={viewMode} onValueChange={handleViewModeChange}>
+            <ToggleGroupItem value="table" aria-label="Table view">
+              <Table2 className="h-4 w-4" />
+            </ToggleGroupItem>
+            <ToggleGroupItem value="grid" aria-label="Grid view">
+              <LayoutGrid className="h-4 w-4" />
+            </ToggleGroupItem>
+            <ToggleGroupItem value="list" aria-label="List view">
+              <LayoutList className="h-4 w-4" />
+            </ToggleGroupItem>
+          </ToggleGroup>
+        </div>
       </div>
 
       <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -174,12 +188,17 @@ export default function CollectionPage() {
                     <ItemImage src={item.imageUrl} alt={item.name} size="sm" />
                   </TableCell>
                   <TableCell>
-                    <Link
-                      href={`/collection/${item.id}`}
-                      className="font-medium hover:underline"
-                    >
-                      {item.name}
-                    </Link>
+                    <div className="flex items-center gap-2">
+                      <Link
+                        href={`/collection/${item.id}`}
+                        className="font-medium hover:underline"
+                      >
+                        {item.name}
+                      </Link>
+                      {item.soldPrice !== undefined && (
+                        <Badge variant="secondary" className="text-xs">Sold</Badge>
+                      )}
+                    </div>
                   </TableCell>
                   <TableCell>
                     <CategoryBadge category={item.category} />
@@ -191,7 +210,9 @@ export default function CollectionPage() {
                     {formatCurrency(item.purchasePrice)}
                   </TableCell>
                   <TableCell className="text-right">
-                    {formatCurrency(item.currentValue)}
+                    {item.soldPrice !== undefined
+                      ? formatCurrency(item.soldPrice)
+                      : formatCurrency(item.currentValue)}
                   </TableCell>
                   <TableCell>{formatDate(item.createdAt)}</TableCell>
                 </TableRow>
@@ -209,9 +230,14 @@ export default function CollectionPage() {
                   <p className="truncate font-medium">{item.name}</p>
                   <div className="mt-2 flex items-center gap-2">
                     <CategoryBadge category={item.category} />
+                    {item.soldPrice !== undefined && (
+                      <Badge variant="secondary" className="text-xs">Sold</Badge>
+                    )}
                   </div>
                   <p className="mt-2 text-sm font-medium">
-                    {formatCurrency(item.currentValue)}
+                    {item.soldPrice !== undefined
+                      ? formatCurrency(item.soldPrice)
+                      : formatCurrency(item.currentValue)}
                   </p>
                 </CardContent>
               </Card>
@@ -233,10 +259,17 @@ export default function CollectionPage() {
                   <div className="mt-1 flex items-center gap-2">
                     <CategoryBadge category={item.category} />
                     <ConditionBadge condition={item.condition} />
+                    {item.soldPrice !== undefined && (
+                      <Badge variant="secondary" className="text-xs">Sold</Badge>
+                    )}
                   </div>
                 </div>
               </div>
-              <p className="font-medium">{formatCurrency(item.currentValue)}</p>
+              <p className="font-medium">
+                {item.soldPrice !== undefined
+                  ? formatCurrency(item.soldPrice)
+                  : formatCurrency(item.currentValue)}
+              </p>
             </Link>
           ))}
         </div>

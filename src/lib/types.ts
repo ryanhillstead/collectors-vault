@@ -26,6 +26,8 @@ export interface CollectionItem {
   condition: Condition;
   imageUrl: string;
   notes: string;
+  soldPrice?: number; // cents — present when item has been sold
+  soldDate?: string; // ISO date string — present when item has been sold
   createdAt: string;
   updatedAt: string;
 }

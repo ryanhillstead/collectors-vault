@@ -11,18 +11,21 @@ import { useCollection } from "@/hooks/use-collection";
 import { CategoryBadge } from "@/components/shared/category-badge";
 import { ConditionBadge } from "@/components/shared/condition-badge";
 import { DeleteDialog } from "@/components/items/delete-dialog";
+import { SellDialog } from "@/components/items/sell-dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ItemImage } from "@/components/shared/item-image";
+import { Badge } from "@/components/ui/badge";
 
 export default function ItemDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
-  const { deleteItem } = useCollection();
+  const { deleteItem, markAsSold } = useCollection();
   const [item, setItem] = useState<CollectionItem | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [sellOpen, setSellOpen] = useState(false);
 
   useEffect(() => {
     const found = getItem(id);
@@ -44,7 +47,11 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
     );
   }
 
-  const gainLoss = item.currentValue - item.purchasePrice;
+  const isSold = item.soldPrice !== undefined;
+
+  const gainLoss = isSold
+    ? item.soldPrice! - item.purchasePrice
+    : item.currentValue - item.purchasePrice;
   const gainLossPercent = item.purchasePrice > 0
     ? ((gainLoss / item.purchasePrice) * 100).toFixed(1)
     : "0.0";
@@ -55,14 +62,33 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
     router.push("/collection");
   }
 
+  function handleSell(soldPrice: number, soldDate: string) {
+    const updated = markAsSold(item!.id, soldPrice, soldDate);
+    if (updated) {
+      setItem(updated);
+      toast.success("Item marked as sold");
+    }
+    setSellOpen(false);
+  }
+
   return (
     <div className="mx-auto max-w-2xl">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">{item.name}</h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-bold">{item.name}</h1>
+          {isSold && <Badge variant="secondary">Sold</Badge>}
+        </div>
         <div className="flex gap-2">
-          <Button variant="outline" asChild>
-            <Link href={`/edit/${item.id}`}>Edit</Link>
-          </Button>
+          {!isSold && (
+            <>
+              <Button variant="outline" asChild>
+                <Link href={`/edit/${item.id}`}>Edit</Link>
+              </Button>
+              <Button variant="outline" onClick={() => setSellOpen(true)}>
+                Mark as Sold
+              </Button>
+            </>
+          )}
           <Button variant="destructive" onClick={() => setDeleteOpen(true)}>
             Delete
           </Button>
@@ -90,17 +116,19 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Current Value
+              {isSold ? "Sold For" : "Current Value"}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{formatCurrency(item.currentValue)}</p>
+            <p className="text-2xl font-bold">
+              {formatCurrency(isSold ? item.soldPrice! : item.currentValue)}
+            </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Gain / Loss
+              {isSold ? "Realized Gain / Loss" : "Gain / Loss"}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -118,6 +146,12 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
           <dt className="text-sm font-medium text-muted-foreground">Purchase Date</dt>
           <dd>{formatDate(item.purchaseDate)}</dd>
         </div>
+        {isSold && item.soldDate && (
+          <div>
+            <dt className="text-sm font-medium text-muted-foreground">Sold Date</dt>
+            <dd>{formatDate(item.soldDate)}</dd>
+          </div>
+        )}
         {item.notes && (
           <div>
             <dt className="text-sm font-medium text-muted-foreground">Notes</dt>
@@ -135,6 +169,12 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
         onOpenChange={setDeleteOpen}
         itemName={item.name}
         onConfirm={handleDelete}
+      />
+      <SellDialog
+        open={sellOpen}
+        onOpenChange={setSellOpen}
+        itemName={item.name}
+        onConfirm={handleSell}
       />
     </div>
   );

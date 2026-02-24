@@ -1,0 +1,48 @@
+<svg height="56" width="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Body shadow -->
+  <rect x="5" y="5" width="50" height="50" rx="12" fill="#0D1B2A" opacity="0.35" />
+
+  <!-- Main body -->
+  <rect x="3" y="3" width="50" height="50" rx="12" fill="#1D4ED8" stroke="#0D1B2A" stroke-width="2.5" />
+
+  <!-- Body top highlight -->
+  <ellipse cx="26" cy="9" rx="18" ry="4" fill="white" opacity="0.22" />
+
+  <!-- Door outer ring -->
+  <circle cx="28" cy="28" r="20" fill="#2563EB" stroke="#0D1B2A" stroke-width="2.5" />
+
+  <!-- Door face -->
+  <circle cx="28" cy="28" r="13" fill="#60A5FA" stroke="#0D1B2A" stroke-width="2" />
+
+  <!-- Door face shine -->
+  <ellipse cx="22" cy="21" rx="5" ry="3" fill="white" opacity="0.35" transform="rotate(-30 22 21)" />
+
+  <!-- Wheel ring (shadow then gold) -->
+  <circle cx="28" cy="28" r="7" fill="none" stroke="#0D1B2A" stroke-width="3.5" />
+  <circle cx="28" cy="28" r="7" fill="none" stroke="#FCD34D" stroke-width="2.5" />
+
+  <!-- Spokes (shadow) -->
+  <line x1="35" y1="28" x2="41" y2="28" stroke="#0D1B2A" stroke-width="3.5" stroke-linecap="round" />
+  <line x1="28" y1="35" x2="28" y2="41" stroke="#0D1B2A" stroke-width="3.5" stroke-linecap="round" />
+  <line x1="21" y1="28" x2="15" y2="28" stroke="#0D1B2A" stroke-width="3.5" stroke-linecap="round" />
+  <line x1="28" y1="21" x2="28" y2="15" stroke="#0D1B2A" stroke-width="3.5" stroke-linecap="round" />
+  <!-- Spokes (gold) -->
+  <line x1="35" y1="28" x2="41" y2="28" stroke="#FCD34D" stroke-width="2" stroke-linecap="round" />
+  <line x1="28" y1="35" x2="28" y2="41" stroke="#FCD34D" stroke-width="2" stroke-linecap="round" />
+  <line x1="21" y1="28" x2="15" y2="28" stroke="#FCD34D" stroke-width="2" stroke-linecap="round" />
+  <line x1="28" y1="21" x2="28" y2="15" stroke="#FCD34D" stroke-width="2" stroke-linecap="round" />
+
+  <!-- Hub -->
+  <circle cx="28" cy="28" r="4" fill="#FCD34D" stroke="#0D1B2A" stroke-width="2" />
+  <circle cx="28" cy="28" r="2" fill="#0D1B2A" />
+
+  <!-- Bolts at 45°/135°/225°/315°, r=16 from center -->
+  <circle cx="39.31" cy="39.31" r="2.8" fill="#FCD34D" stroke="#0D1B2A" stroke-width="1.5" />
+  <circle cx="16.69" cy="39.31" r="2.8" fill="#FCD34D" stroke="#0D1B2A" stroke-width="1.5" />
+  <circle cx="16.69" cy="16.69" r="2.8" fill="#FCD34D" stroke="#0D1B2A" stroke-width="1.5" />
+  <circle cx="39.31" cy="16.69" r="2.8" fill="#FCD34D" stroke="#0D1B2A" stroke-width="1.5" />
+
+  <!-- Left hinges -->
+  <rect x="1" y="13" width="5" height="8" rx="2" fill="#FCD34D" stroke="#0D1B2A" stroke-width="1.5" />
+  <rect x="1" y="35" width="5" height="8" rx="2" fill="#FCD34D" stroke="#0D1B2A" stroke-width="1.5" />
+</svg>
