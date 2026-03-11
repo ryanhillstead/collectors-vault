@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Table2, LayoutGrid, LayoutList } from "lucide-react";
 import { useCollection } from "@/hooks/use-collection";
 import { categories, categoryLabels, conditions, conditionLabels } from "@/lib/types";
@@ -42,9 +43,23 @@ function getStoredViewMode(): ViewMode {
 }
 
 export default function CollectionPage() {
+  return (
+    <Suspense fallback={<LoadingSkeleton />}>
+      <CollectionContent />
+    </Suspense>
+  );
+}
+
+function CollectionContent() {
   const { items, isLoaded } = useCollection();
+  const searchParams = useSearchParams();
   const [search, setSearch] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [categoryFilter, setCategoryFilter] = useState<string>(
+    () => {
+      const param = searchParams.get("category");
+      return param && categories.includes(param as any) ? param : "all";
+    }
+  );
   const [conditionFilter, setConditionFilter] = useState<string>("all");
   const [sortBy, setSortBy] = useState<SortKey>("createdAt");
   const [viewMode, setViewMode] = useState<ViewMode>(() => getStoredViewMode());

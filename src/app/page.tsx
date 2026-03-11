@@ -62,7 +62,13 @@ export default function DashboardPage() {
             {categories
               .filter((cat) => stats.byCategory[cat] > 0)
               .map((cat) => (
-                <StatCard key={cat} label={categoryLabels[cat]} value={stats.byCategory[cat]} />
+                <Link
+                  key={cat}
+                  href={`/collection?category=${cat}`}
+                  className="transition-colors hover:opacity-80"
+                >
+                  <StatCard label={categoryLabels[cat]} value={stats.byCategory[cat]} />
+                </Link>
               ))}
           </div>
         </div>
