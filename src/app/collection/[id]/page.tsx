@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { use, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -13,27 +13,18 @@ import { ConditionBadge } from "@/components/shared/condition-badge";
 import { DeleteDialog } from "@/components/items/delete-dialog";
 import { SellDialog } from "@/components/items/sell-dialog";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ItemImage } from "@/components/shared/item-image";
+import { StatCard } from "@/components/shared/stat-card";
 import { Badge } from "@/components/ui/badge";
 
 export default function ItemDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
   const { deleteItem, markAsSold } = useCollection();
-  const [item, setItem] = useState<CollectionItem | null>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [item, setItem] = useState<CollectionItem | null>(() => getItem(id) ?? null);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [sellOpen, setSellOpen] = useState(false);
-
-  useEffect(() => {
-    const found = getItem(id);
-    setItem(found ?? null);
-    setIsLoaded(true);
-  }, [id]);
-
-  if (!isLoaded) return null;
 
   if (!item) {
     return (
@@ -103,40 +94,16 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
       <ItemImage src={item.imageUrl} alt={item.name} size="lg" className="mb-6" />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Purchase Price
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{formatCurrency(item.purchasePrice)}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              {isSold ? "Sold For" : "Current Value"}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">
-              {formatCurrency(isSold ? item.soldPrice! : item.currentValue)}
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              {isSold ? "Realized Gain / Loss" : "Gain / Loss"}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className={`text-2xl font-bold ${gainLoss >= 0 ? "text-green-600" : "text-red-600"}`}>
-              {gainLoss >= 0 ? "+" : ""}{formatCurrency(gainLoss)} ({gainLossPercent}%)
-            </p>
-          </CardContent>
-        </Card>
+        <StatCard label="Purchase Price" value={formatCurrency(item.purchasePrice)} />
+        <StatCard
+          label={isSold ? "Sold For" : "Current Value"}
+          value={formatCurrency(isSold ? item.soldPrice! : item.currentValue)}
+        />
+        <StatCard
+          label={isSold ? "Realized Gain / Loss" : "Gain / Loss"}
+          value={`${gainLoss >= 0 ? "+" : ""}${formatCurrency(gainLoss)} (${gainLossPercent}%)`}
+          variant={gainLoss >= 0 ? "success" : "error"}
+        />
       </div>
 
       <Separator className="my-6" />

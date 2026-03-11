@@ -1,10 +1,10 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { use } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
-import { CollectionItem, Category, Condition } from "@/lib/types";
+import { Category, Condition } from "@/lib/types";
 import { getItem } from "@/lib/storage";
 import { ItemFormValues, dollarsToCents } from "@/lib/schemas";
 import { useCollection } from "@/hooks/use-collection";
@@ -15,16 +15,7 @@ export default function EditItemPage({ params }: { params: Promise<{ id: string 
   const { id } = use(params);
   const router = useRouter();
   const { updateItem } = useCollection();
-  const [item, setItem] = useState<CollectionItem | null>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    const found = getItem(id);
-    setItem(found ?? null);
-    setIsLoaded(true);
-  }, [id]);
-
-  if (!isLoaded) return null;
+  const item = getItem(id) ?? null;
 
   if (!item) {
     return (

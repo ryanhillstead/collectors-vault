@@ -8,7 +8,7 @@ import { EmptyState } from "@/components/shared/empty-state";
 import { LoadingSkeleton } from "@/components/shared/loading-skeleton";
 import { CategoryBadge } from "@/components/shared/category-badge";
 import { CollectionChart } from "@/components/shared/collection-chart";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { StatCard } from "@/components/shared/stat-card";
 import { ItemImage } from "@/components/shared/item-image";
 
 export default function DashboardPage() {
@@ -35,62 +35,21 @@ export default function DashboardPage() {
       <h1 className="mb-6 text-2xl font-bold">Dashboard</h1>
 
       <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Total Items
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{stats.totalItems}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Total Invested
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{formatCurrency(stats.totalInvested)}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Total Value
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{formatCurrency(stats.totalValue)}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Gain / Loss
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className={`text-2xl font-bold ${gainLoss >= 0 ? "text-green-600" : "text-red-600"}`}>
-              {gainLoss >= 0 ? "+" : ""}{formatCurrency(gainLoss)}
-            </p>
-          </CardContent>
-        </Card>
+        <StatCard label="Total Items" value={stats.totalItems} />
+        <StatCard label="Total Invested" value={formatCurrency(stats.totalInvested)} />
+        <StatCard label="Total Value" value={formatCurrency(stats.totalValue)} />
+        <StatCard
+          label="Gain / Loss"
+          value={`${gainLoss >= 0 ? "+" : ""}${formatCurrency(gainLoss)}`}
+          variant={gainLoss >= 0 ? "success" : "error"}
+        />
         {stats.soldItems > 0 && (
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Realized Gains
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className={`text-2xl font-bold ${stats.realizedGains >= 0 ? "text-green-600" : "text-red-600"}`}>
-                {stats.realizedGains >= 0 ? "+" : ""}{formatCurrency(stats.realizedGains)}
-              </p>
-              <p className="text-xs text-muted-foreground">{stats.soldItems} item{stats.soldItems !== 1 ? "s" : ""} sold</p>
-            </CardContent>
-          </Card>
+          <StatCard
+            label="Realized Gains"
+            value={`${stats.realizedGains >= 0 ? "+" : ""}${formatCurrency(stats.realizedGains)}`}
+            variant={stats.realizedGains >= 0 ? "success" : "error"}
+            subtext={`${stats.soldItems} item${stats.soldItems !== 1 ? "s" : ""} sold`}
+          />
         )}
       </div>
 
@@ -103,16 +62,7 @@ export default function DashboardPage() {
             {categories
               .filter((cat) => stats.byCategory[cat] > 0)
               .map((cat) => (
-                <Card key={cat}>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">
-                      {categoryLabels[cat]}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-2xl font-bold">{stats.byCategory[cat]}</p>
-                  </CardContent>
-                </Card>
+                <StatCard key={cat} label={categoryLabels[cat]} value={stats.byCategory[cat]} />
               ))}
           </div>
         </div>

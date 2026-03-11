@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { Table2, LayoutGrid, LayoutList } from "lucide-react";
 import { useCollection } from "@/hooks/use-collection";
@@ -47,12 +47,8 @@ export default function CollectionPage() {
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [conditionFilter, setConditionFilter] = useState<string>("all");
   const [sortBy, setSortBy] = useState<SortKey>("createdAt");
-  const [viewMode, setViewMode] = useState<ViewMode>("table");
+  const [viewMode, setViewMode] = useState<ViewMode>(() => getStoredViewMode());
   const [showSold, setShowSold] = useState(false);
-
-  useEffect(() => {
-    setViewMode(getStoredViewMode());
-  }, []);
 
   function handleViewModeChange(value: string) {
     if (value === "table" || value === "grid" || value === "list") {
@@ -87,7 +83,7 @@ export default function CollectionPage() {
     });
 
     return result;
-  }, [items, search, categoryFilter, conditionFilter, sortBy]);
+  }, [items, search, categoryFilter, conditionFilter, sortBy, showSold]);
 
   if (!isLoaded) return <LoadingSkeleton />;
 
