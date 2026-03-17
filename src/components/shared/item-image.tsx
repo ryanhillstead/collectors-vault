@@ -51,7 +51,7 @@ export function ItemImage({ src, alt, size, className }: ItemImageProps) {
       height={height}
       unoptimized
       onError={() => setError(true)}
-      className={cn("rounded-md object-cover", sizeMap[size], className)}
+      className={cn("rounded-md", size === "lg" ? "object-contain" : "object-cover", sizeMap[size], className)}
       priority={size === "lg"}
     />
   );
