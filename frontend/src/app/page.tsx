@@ -55,19 +55,19 @@ export default function DashboardPage() {
 
       <CollectionChart items={items} />
 
-      {categories.some((cat) => stats.byCategory[cat] > 0) && (
+      {categories.some((cat) => stats.byCategory[cat].count > 0) && (
         <div className="mb-8">
           <h2 className="mb-4 text-lg font-semibold">By Category</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {categories
-              .filter((cat) => stats.byCategory[cat] > 0)
+              .filter((cat) => stats.byCategory[cat].count > 0)
               .map((cat) => (
                 <Link
                   key={cat}
                   href={`/collection?category=${cat}`}
                   className="transition-colors hover:opacity-80"
                 >
-                  <StatCard label={categoryLabels[cat]} value={stats.byCategory[cat]} />
+                  <StatCard label={categoryLabels[cat]} value={stats.byCategory[cat].count} />
                 </Link>
               ))}
           </div>

@@ -1,14 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { CollectionItem, Category } from "@/lib/types";
+import { CollectionItem, Category, CategoryStats } from "@/lib/types";
 import * as storage from "@/lib/storage";
 
 export interface CollectionStats {
   totalItems: number;
   totalInvested: number;
   totalValue: number;
-  byCategory: Record<Category, number>;
+  byCategory: Record<Category, CategoryStats>;
   realizedGains: number;
   soldItems: number;
 }
@@ -62,15 +62,16 @@ export function useCollection() {
     totalItems: activeItems.length,
     totalInvested: activeItems.reduce((sum, item) => sum + item.purchasePrice, 0),
     totalValue: activeItems.reduce((sum, item) => sum + item.currentValue, 0),
-    byCategory: {
-      "video-game": activeItems.filter((i) => i.category === "video-game").length,
-      "trading-card": activeItems.filter((i) => i.category === "trading-card").length,
-      comic: activeItems.filter((i) => i.category === "comic").length,
-      "funko-pop": activeItems.filter((i) => i.category === "funko-pop").length,
-      "lego-set": activeItems.filter((i) => i.category === "lego-set").length,
-      coin: activeItems.filter((i) => i.category === "coin").length,
-      "sports-card": activeItems.filter((i) => i.category === "sports-card").length,
-    },
+    byCategory: Object.fromEntries(
+      (["video-game", "trading-card", "comic", "funko-pop", "lego-set", "coin", "sports-card"] as Category[]).map((cat) => {
+        const catItems = activeItems.filter((i) => i.category === cat);
+        return [cat, {
+          count: catItems.length,
+          totalInvested: catItems.reduce((sum, i) => sum + i.purchasePrice, 0),
+          totalValue: catItems.reduce((sum, i) => sum + i.currentValue, 0),
+        }];
+      })
+    ) as Record<Category, CategoryStats>,
     realizedGains: soldItems.reduce(
       (sum, item) => sum + (item.soldPrice! - item.purchasePrice),
       0
