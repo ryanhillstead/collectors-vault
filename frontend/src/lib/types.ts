@@ -69,3 +69,16 @@ export const conditions: Condition[] = [
   "fair",
   "poor",
 ];
+
+export interface ValueSnapshot {
+  date: string;        // YYYY-MM-DD
+  totalInvested: number; // cents
+  totalValue: number;    // cents
+  itemCount: number;
+}
+
+export interface CategoryStats {
+  count: number;
+  totalInvested: number; // cents
+  totalValue: number;    // cents
+}
