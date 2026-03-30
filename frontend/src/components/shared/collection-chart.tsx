@@ -10,7 +10,7 @@ import {
   ChartLegendContent,
   type ChartConfig,
 } from "@/components/ui/chart";
-import { CollectionItem } from "@/lib/types";
+import { CollectionItem, ValueSnapshot } from "@/lib/types";
 import {
   Card,
   CardContent,
@@ -76,6 +76,17 @@ function buildChartData(items: CollectionItem[]): ChartPoint[] {
   ];
 }
 
+function buildSnapshotChartData(snapshots: ValueSnapshot[]): ChartPoint[] {
+  return snapshots.map((s) => ({
+    date: new Date(`${s.date}T12:00:00`).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    }),
+    invested: s.totalInvested / 100,
+    value: s.totalValue / 100,
+  }));
+}
+
 function dateRangeLabel(items: CollectionItem[]): string {
   if (items.length === 0) return "";
   const dates = items.map((i) => i.purchaseDate).sort();
@@ -91,10 +102,14 @@ function dateRangeLabel(items: CollectionItem[]): string {
 
 interface CollectionChartProps {
   items: CollectionItem[];
+  snapshots?: ValueSnapshot[];
 }
 
-export function CollectionChart({ items }: CollectionChartProps) {
-  const data = useMemo(() => buildChartData(items), [items]);
+export function CollectionChart({ items, snapshots = [] }: CollectionChartProps) {
+  const data = useMemo(() => {
+    if (snapshots.length >= 2) return buildSnapshotChartData(snapshots);
+    return buildChartData(items);
+  }, [items, snapshots]);
   const dateRange = useMemo(() => dateRangeLabel(items), [items]);
 
   if (data.length === 0) return null;
