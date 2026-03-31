@@ -8,11 +8,16 @@ import { EmptyState } from "@/components/shared/empty-state";
 import { LoadingSkeleton } from "@/components/shared/loading-skeleton";
 import { CategoryBadge } from "@/components/shared/category-badge";
 import { CollectionChart } from "@/components/shared/collection-chart";
+import { CategoryDonutChart } from "@/components/shared/category-donut-chart";
+import { TopPerformers } from "@/components/shared/top-performers";
+import { CollectionTimeline } from "@/components/shared/collection-timeline";
 import { StatCard } from "@/components/shared/stat-card";
 import { ItemImage } from "@/components/shared/item-image";
+import { useValueHistory } from "@/hooks/use-value-history";
 
 export default function DashboardPage() {
   const { items, isLoaded, stats } = useCollection();
+  const snapshots = useValueHistory(items, isLoaded);
 
   if (!isLoaded) return <LoadingSkeleton />;
 
@@ -53,7 +58,13 @@ export default function DashboardPage() {
         )}
       </div>
 
-      <CollectionChart items={items} />
+      <CollectionChart items={items} snapshots={snapshots} />
+
+      <CategoryDonutChart byCategory={stats.byCategory} />
+
+      <TopPerformers items={items} />
+
+      <CollectionTimeline items={items} />
 
       {categories.some((cat) => stats.byCategory[cat].count > 0) && (
         <div className="mb-8">
