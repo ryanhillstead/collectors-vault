@@ -83,7 +83,7 @@ export function TopPerformers({ items }: TopPerformersProps) {
   if (gainers.length === 0 && losers.length === 0) return null;
 
   return (
-    <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2">
+    <div className="space-y-4">
       {gainers.length > 0 && (
         <Card>
           <CardHeader className="pb-3">

@@ -60,7 +60,7 @@ export function CategoryDonutChart({ byCategory }: CategoryDonutChartProps) {
   const total = data.reduce((sum, d) => sum + d.value, 0);
 
   return (
-    <Card className="mb-8">
+    <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Value by Category</CardTitle>
         <div className="flex gap-1 rounded-lg border p-1">
@@ -88,7 +88,7 @@ export function CategoryDonutChart({ byCategory }: CategoryDonutChartProps) {
       </CardHeader>
       <CardContent>
         <div className="flex flex-col items-center gap-6 sm:flex-row">
-          <ChartContainer config={chartConfig} className="h-[200px] w-[200px]">
+          <ChartContainer config={chartConfig} className="aspect-square h-[200px] w-[200px]">
             <PieChart>
               <ChartTooltip
                 content={

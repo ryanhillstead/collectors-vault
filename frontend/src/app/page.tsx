@@ -60,9 +60,10 @@ export default function DashboardPage() {
 
       <CollectionChart items={items} snapshots={snapshots} />
 
-      <CategoryDonutChart byCategory={stats.byCategory} />
-
-      <TopPerformers items={items} />
+      <div className="mb-8 grid grid-cols-2 gap-4">
+        <CategoryDonutChart byCategory={stats.byCategory} />
+        <TopPerformers items={items} />
+      </div>
 
       <CollectionTimeline items={items} />
 
