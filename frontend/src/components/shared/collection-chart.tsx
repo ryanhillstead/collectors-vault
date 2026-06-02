@@ -22,11 +22,11 @@ import {
 const chartConfig = {
   invested: {
     label: "Total Invested",
-    color: "hsl(221, 83%, 53%)", // blue-500
+    color: "var(--chart-2)", // sapphire
   },
   value: {
     label: "Current Value",
-    color: "hsl(45, 93%, 47%)", // yellow-400
+    color: "var(--chart-1)", // treasure gold
   },
 } satisfies ChartConfig;
 

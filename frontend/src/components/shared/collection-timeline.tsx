@@ -28,11 +28,11 @@ import {
 const chartConfig = {
   items: {
     label: "Items Added",
-    color: "hsl(221, 83%, 53%)",
+    color: "var(--chart-2)", // sapphire
   },
   spent: {
     label: "Amount Spent",
-    color: "hsl(45, 93%, 47%)",
+    color: "var(--chart-1)", // treasure gold
   },
 } satisfies ChartConfig;
 

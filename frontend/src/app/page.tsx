@@ -1,6 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import {
+  Wallet,
+  Coins,
+  TrendingUp,
+  TrendingDown,
+  Package,
+  Banknote,
+  ArrowUpRight,
+} from "lucide-react";
 import { useCollection } from "@/hooks/use-collection";
 import { categoryLabels, categories } from "@/lib/types";
 import { formatCurrency, formatDate } from "@/lib/utils";
@@ -23,95 +32,201 @@ export default function DashboardPage() {
 
   if (items.length === 0) {
     return (
-      <div>
-        <h1 className="mb-6 text-2xl font-bold">Dashboard</h1>
+      <div className="space-y-8">
+        <DashboardHeading subtitle="Track every piece you treasure." />
         <EmptyState />
       </div>
     );
   }
 
   const gainLoss = stats.totalValue - stats.totalInvested;
+  const gainPct =
+    stats.totalInvested > 0 ? (gainLoss / stats.totalInvested) * 100 : 0;
+  const isUp = gainLoss >= 0;
+
   const recentItems = [...items]
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    )
     .slice(0, 5);
 
   return (
-    <div>
-      <h1 className="mb-6 text-2xl font-bold">Dashboard</h1>
+    <div className="space-y-10">
+      <DashboardHeading
+        subtitle={`${stats.totalItems} ${
+          stats.totalItems === 1 ? "piece" : "pieces"
+        } under your care.`}
+      />
 
-      <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Total Items" value={stats.totalItems} />
-        <StatCard label="Total Invested" value={formatCurrency(stats.totalInvested)} />
-        <StatCard label="Total Value" value={formatCurrency(stats.totalValue)} />
-        <StatCard
-          label="Gain / Loss"
-          value={`${gainLoss >= 0 ? "+" : ""}${formatCurrency(gainLoss)}`}
-          variant={gainLoss >= 0 ? "success" : "error"}
-        />
-        {stats.soldItems > 0 && (
+      {/* Hero figures */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="reveal reveal-1 sm:col-span-2">
           <StatCard
-            label="Realized Gains"
-            value={`${stats.realizedGains >= 0 ? "+" : ""}${formatCurrency(stats.realizedGains)}`}
-            variant={stats.realizedGains >= 0 ? "success" : "error"}
-            subtext={`${stats.soldItems} item${stats.soldItems !== 1 ? "s" : ""} sold`}
+            label="Total Value"
+            value={formatCurrency(stats.totalValue)}
+            subtext={
+              <span
+                className={isUp ? "text-gain" : "text-loss"}
+              >
+                {isUp ? "▲" : "▼"} {isUp ? "+" : ""}
+                {formatCurrency(gainLoss)} ({isUp ? "+" : ""}
+                {gainPct.toFixed(1)}%) all-time
+              </span>
+            }
+            icon={<Wallet />}
+            emphasis
           />
+        </div>
+        <div className="reveal reveal-2">
+          <StatCard
+            label="Invested"
+            value={formatCurrency(stats.totalInvested)}
+            icon={<Banknote />}
+          />
+        </div>
+        <div className="reveal reveal-3">
+          <StatCard
+            label="Items"
+            value={stats.totalItems}
+            icon={<Package />}
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="reveal reveal-3">
+          <StatCard
+            label="Unrealized"
+            value={`${isUp ? "+" : ""}${formatCurrency(gainLoss)}`}
+            variant={isUp ? "success" : "error"}
+            icon={isUp ? <TrendingUp /> : <TrendingDown />}
+          />
+        </div>
+        {stats.soldItems > 0 && (
+          <div className="reveal reveal-4">
+            <StatCard
+              label="Realized Gains"
+              value={`${stats.realizedGains >= 0 ? "+" : ""}${formatCurrency(
+                stats.realizedGains
+              )}`}
+              variant={stats.realizedGains >= 0 ? "success" : "error"}
+              subtext={`${stats.soldItems} item${
+                stats.soldItems !== 1 ? "s" : ""
+              } sold`}
+              icon={<Coins />}
+            />
+          </div>
         )}
       </div>
 
-      <CollectionChart items={items} snapshots={snapshots} />
+      <div className="reveal reveal-4">
+        <CollectionChart items={items} snapshots={snapshots} />
+      </div>
 
-      <div className="mb-8 grid grid-cols-2 gap-4">
+      <div className="reveal reveal-5 grid grid-cols-1 gap-4 lg:grid-cols-2">
         <CategoryDonutChart byCategory={stats.byCategory} />
         <TopPerformers items={items} />
       </div>
 
-      <CollectionTimeline items={items} />
+      <div className="reveal reveal-5">
+        <CollectionTimeline items={items} />
+      </div>
 
       {categories.some((cat) => stats.byCategory[cat].count > 0) && (
-        <div className="mb-8">
-          <h2 className="mb-4 text-lg font-semibold">By Category</h2>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <section className="reveal reveal-6">
+          <SectionHeading>By Category</SectionHeading>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
             {categories
               .filter((cat) => stats.byCategory[cat].count > 0)
               .map((cat) => (
                 <Link
                   key={cat}
                   href={`/collection?category=${cat}`}
-                  className="transition-colors hover:opacity-80"
+                  className="group focus:outline-none"
                 >
-                  <StatCard label={categoryLabels[cat]} value={stats.byCategory[cat].count} />
+                  <StatCard
+                    label={categoryLabels[cat]}
+                    value={stats.byCategory[cat].count}
+                    subtext={formatCurrency(stats.byCategory[cat].totalValue)}
+                  />
                 </Link>
               ))}
           </div>
-        </div>
+        </section>
       )}
 
-      <div>
-        <h2 className="mb-4 text-lg font-semibold">Recently Added</h2>
-        <div className="space-y-3">
-          {recentItems.map((item) => (
+      <section className="reveal reveal-6">
+        <SectionHeading
+          action={
+            <Link
+              href="/collection"
+              className="inline-flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              View all <ArrowUpRight className="size-4" />
+            </Link>
+          }
+        >
+          Recently Added
+        </SectionHeading>
+        <div className="overflow-hidden rounded-xl border border-border/70 bg-card/50">
+          {recentItems.map((item, i) => (
             <Link
               key={item.id}
               href={`/collection/${item.id}`}
-              className="flex items-center justify-between rounded-lg border p-4 transition-colors hover:bg-muted/50"
+              className="flex items-center justify-between gap-4 px-4 py-3 transition-colors hover:bg-accent/60"
+              style={{
+                borderTop: i === 0 ? undefined : "1px solid var(--border)",
+              }}
             >
-              <div className="flex items-center gap-3">
+              <div className="flex min-w-0 items-center gap-3">
                 <ItemImage src={item.imageUrl} alt={item.name} size="sm" />
-                <div>
-                  <p className="font-medium">{item.name}</p>
-                  <p className="text-sm text-muted-foreground">
+                <div className="min-w-0">
+                  <p className="truncate font-medium">{item.name}</p>
+                  <p className="text-xs text-muted-foreground">
                     {formatDate(item.createdAt)}
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
-                <CategoryBadge category={item.category} />
-                <span className="font-medium">{formatCurrency(item.currentValue)}</span>
+              <div className="flex shrink-0 items-center gap-3">
+                <span className="hidden sm:inline">
+                  <CategoryBadge category={item.category} />
+                </span>
+                <span className="tnum font-medium tabular-nums">
+                  {formatCurrency(item.currentValue)}
+                </span>
               </div>
             </Link>
           ))}
         </div>
-      </div>
+      </section>
+    </div>
+  );
+}
+
+function DashboardHeading({ subtitle }: { subtitle: string }) {
+  return (
+    <div className="reveal">
+      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-gold">
+        The Vault
+      </p>
+      <h1 className="mt-1 text-3xl font-semibold sm:text-4xl">Dashboard</h1>
+      <p className="mt-1.5 text-sm text-muted-foreground">{subtitle}</p>
+    </div>
+  );
+}
+
+function SectionHeading({
+  children,
+  action,
+}: {
+  children: React.ReactNode;
+  action?: React.ReactNode;
+}) {
+  return (
+    <div className="mb-4 flex items-end justify-between gap-4">
+      <h2 className="text-xl font-semibold">{children}</h2>
+      {action}
     </div>
   );
 }

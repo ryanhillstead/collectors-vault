@@ -3,7 +3,7 @@
 import { Suspense, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Table2, LayoutGrid, LayoutList } from "lucide-react";
+import { Table2, LayoutGrid, LayoutList, Search } from "lucide-react";
 import { useCollection } from "@/hooks/use-collection";
 import { categories, categoryLabels, conditions, conditionLabels } from "@/lib/types";
 import { formatCurrency, formatDate } from "@/lib/utils";
@@ -103,16 +103,25 @@ function CollectionContent() {
   if (!isLoaded) return <LoadingSkeleton />;
 
   return (
-    <div>
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Collection</h1>
+    <div className="space-y-8">
+      <div className="reveal flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-gold">
+            The Vault
+          </p>
+          <h1 className="mt-1 text-3xl font-semibold sm:text-4xl">Collection</h1>
+          <p className="mt-1.5 text-sm text-muted-foreground">
+            {filtered.length} {filtered.length === 1 ? "piece" : "pieces"} on
+            display
+          </p>
+        </div>
         <div className="flex items-center gap-3">
           {hasSoldItems && (
             <button
               onClick={() => setShowSold((v) => !v)}
-              className="text-sm text-muted-foreground underline-offset-4 hover:underline"
+              className="text-sm text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
             >
-              {showSold ? "Hide sold items" : "Show sold items"}
+              {showSold ? "Hide sold" : "Show sold"}
             </button>
           )}
           <ToggleGroup type="single" value={viewMode} onValueChange={handleViewModeChange}>
@@ -129,12 +138,16 @@ function CollectionContent() {
         </div>
       </div>
 
-      <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Input
-          placeholder="Search by name..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+      <div className="reveal reveal-1 grid grid-cols-1 gap-3 rounded-xl border border-border/70 bg-card/50 p-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="relative">
+          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            placeholder="Search by name…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-9"
+          />
+        </div>
         <Select value={categoryFilter} onValueChange={setCategoryFilter}>
           <SelectTrigger>
             <SelectValue placeholder="Category" />
@@ -174,117 +187,147 @@ function CollectionContent() {
         </Select>
       </div>
 
-      {items.length === 0 ? (
-        <EmptyState />
-      ) : filtered.length === 0 ? (
-        <p className="text-center text-muted-foreground">No items match your filters.</p>
-      ) : viewMode === "table" ? (
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[50px]"></TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Condition</TableHead>
-                <TableHead className="text-right">Purchase Price</TableHead>
-                <TableHead className="text-right">Current Value</TableHead>
-                <TableHead>Date Added</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filtered.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell>
-                    <ItemImage src={item.imageUrl} alt={item.name} size="sm" />
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <Link
-                        href={`/collection/${item.id}`}
-                        className="font-medium hover:underline"
-                      >
-                        {item.name}
-                      </Link>
-                      {item.soldPrice !== undefined && (
-                        <Badge variant="secondary" className="text-xs">Sold</Badge>
-                      )}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <CategoryBadge category={item.category} />
-                  </TableCell>
-                  <TableCell>
-                    <ConditionBadge condition={item.condition} />
-                  </TableCell>
-                  <TableCell className="text-right">
-                    {formatCurrency(item.purchasePrice)}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    {item.soldPrice !== undefined
-                      ? formatCurrency(item.soldPrice)
-                      : formatCurrency(item.currentValue)}
-                  </TableCell>
-                  <TableCell>{formatDate(item.createdAt)}</TableCell>
+      <div className="reveal reveal-2">
+        {items.length === 0 ? (
+          <EmptyState />
+        ) : filtered.length === 0 ? (
+          <p className="rounded-xl border border-dashed border-border/70 py-16 text-center text-muted-foreground">
+            No items match your filters.
+          </p>
+        ) : viewMode === "table" ? (
+          <div className="overflow-hidden rounded-xl border border-border/70 bg-card/50">
+            <Table>
+              <TableHeader>
+                <TableRow className="hover:bg-transparent">
+                  <TableHead className="w-[50px]"></TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Category</TableHead>
+                  <TableHead>Condition</TableHead>
+                  <TableHead className="text-right">Purchase Price</TableHead>
+                  <TableHead className="text-right">Current Value</TableHead>
+                  <TableHead>Date Added</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      ) : viewMode === "grid" ? (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {filtered.map((item) => (
-            <Link key={item.id} href={`/collection/${item.id}`}>
-              <Card className="transition-colors hover:bg-muted/50">
-                <CardContent className="p-4">
-                  <ItemImage src={item.imageUrl} alt={item.name} size="md" className="mx-auto mb-3" />
-                  <p className="truncate font-medium">{item.name}</p>
-                  <div className="mt-2 flex items-center gap-2">
-                    <CategoryBadge category={item.category} />
-                    {item.soldPrice !== undefined && (
-                      <Badge variant="secondary" className="text-xs">Sold</Badge>
-                    )}
+              </TableHeader>
+              <TableBody>
+                {filtered.map((item) => {
+                  const value =
+                    item.soldPrice !== undefined ? item.soldPrice : item.currentValue;
+                  const up = value >= item.purchasePrice;
+                  return (
+                    <TableRow key={item.id} className="hover:bg-accent/50">
+                      <TableCell>
+                        <ItemImage src={item.imageUrl} alt={item.name} size="sm" />
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <Link
+                            href={`/collection/${item.id}`}
+                            className="font-medium hover:text-gold hover:underline"
+                          >
+                            {item.name}
+                          </Link>
+                          {item.soldPrice !== undefined && (
+                            <Badge variant="secondary" className="text-xs">Sold</Badge>
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <CategoryBadge category={item.category} />
+                      </TableCell>
+                      <TableCell>
+                        <ConditionBadge condition={item.condition} />
+                      </TableCell>
+                      <TableCell className="tnum text-right tabular-nums text-muted-foreground">
+                        {formatCurrency(item.purchasePrice)}
+                      </TableCell>
+                      <TableCell
+                        className={`tnum text-right font-medium tabular-nums ${
+                          up ? "text-gain" : "text-loss"
+                        }`}
+                      >
+                        {formatCurrency(value)}
+                      </TableCell>
+                      <TableCell className="text-muted-foreground">
+                        {formatDate(item.createdAt)}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </div>
+        ) : viewMode === "grid" ? (
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            {filtered.map((item) => {
+              const value =
+                item.soldPrice !== undefined ? item.soldPrice : item.currentValue;
+              const up = value >= item.purchasePrice;
+              return (
+                <Link key={item.id} href={`/collection/${item.id}`}>
+                  <Card className="vault-card h-full overflow-hidden">
+                    <CardContent className="p-4">
+                      <div className="mb-3 flex items-center justify-center rounded-lg bg-muted/40 p-2">
+                        <ItemImage src={item.imageUrl} alt={item.name} size="md" />
+                      </div>
+                      <p className="truncate font-medium">{item.name}</p>
+                      <div className="mt-2 flex flex-wrap items-center gap-2">
+                        <CategoryBadge category={item.category} />
+                        {item.soldPrice !== undefined && (
+                          <Badge variant="secondary" className="text-xs">Sold</Badge>
+                        )}
+                      </div>
+                      <p
+                        className={`tnum mt-3 text-lg font-semibold tabular-nums ${
+                          up ? "text-gain" : "text-loss"
+                        }`}
+                      >
+                        {formatCurrency(value)}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </Link>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="overflow-hidden rounded-xl border border-border/70 bg-card/50">
+            {filtered.map((item, i) => {
+              const value =
+                item.soldPrice !== undefined ? item.soldPrice : item.currentValue;
+              const up = value >= item.purchasePrice;
+              return (
+                <Link
+                  key={item.id}
+                  href={`/collection/${item.id}`}
+                  className="flex items-center justify-between gap-4 px-4 py-3 transition-colors hover:bg-accent/50"
+                  style={{ borderTop: i === 0 ? undefined : "1px solid var(--border)" }}
+                >
+                  <div className="flex min-w-0 items-center gap-3">
+                    <ItemImage src={item.imageUrl} alt={item.name} size="sm" />
+                    <div className="min-w-0">
+                      <p className="truncate font-medium">{item.name}</p>
+                      <div className="mt-1 flex flex-wrap items-center gap-2">
+                        <CategoryBadge category={item.category} />
+                        <ConditionBadge condition={item.condition} />
+                        {item.soldPrice !== undefined && (
+                          <Badge variant="secondary" className="text-xs">Sold</Badge>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                  <p className="mt-2 text-sm font-medium">
-                    {item.soldPrice !== undefined
-                      ? formatCurrency(item.soldPrice)
-                      : formatCurrency(item.currentValue)}
+                  <p
+                    className={`tnum shrink-0 font-semibold tabular-nums ${
+                      up ? "text-gain" : "text-loss"
+                    }`}
+                  >
+                    {formatCurrency(value)}
                   </p>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {filtered.map((item) => (
-            <Link
-              key={item.id}
-              href={`/collection/${item.id}`}
-              className="flex items-center justify-between rounded-lg border p-4 transition-colors hover:bg-muted/50"
-            >
-              <div className="flex items-center gap-3">
-                <ItemImage src={item.imageUrl} alt={item.name} size="sm" />
-                <div>
-                  <p className="font-medium">{item.name}</p>
-                  <div className="mt-1 flex items-center gap-2">
-                    <CategoryBadge category={item.category} />
-                    <ConditionBadge condition={item.condition} />
-                    {item.soldPrice !== undefined && (
-                      <Badge variant="secondary" className="text-xs">Sold</Badge>
-                    )}
-                  </div>
-                </div>
-              </div>
-              <p className="font-medium">
-                {item.soldPrice !== undefined
-                  ? formatCurrency(item.soldPrice)
-                  : formatCurrency(item.currentValue)}
-              </p>
-            </Link>
-          ))}
-        </div>
-      )}
+                </Link>
+              );
+            })}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

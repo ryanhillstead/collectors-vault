@@ -7,8 +7,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-manrope);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-fraunces);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -38,6 +39,14 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+
+  /* Brand tokens — the language of the Vault */
+  --color-gold: var(--gold);
+  --color-gold-foreground: var(--gold-foreground);
+  --color-ink: var(--ink);
+  --color-gain: var(--gain);
+  --color-loss: var(--loss);
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -47,73 +56,109 @@
   --radius-4xl: calc(var(--radius) + 16px);
 }
 
+/* ------------------------------------------------------------------ */
+/*  LIGHT — "Collector's Ledger": warm ivory paper, deep navy ink     */
+/* ------------------------------------------------------------------ */
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --radius: 0.75rem;
+
+  --background: oklch(0.975 0.008 85);
+  --foreground: oklch(0.22 0.03 264);
+
+  --card: oklch(0.995 0.004 85);
+  --card-foreground: oklch(0.22 0.03 264);
+  --popover: oklch(0.995 0.004 85);
+  --popover-foreground: oklch(0.22 0.03 264);
+
+  /* Treasure gold is the primary action in both themes */
+  --primary: oklch(0.78 0.15 78);
+  --primary-foreground: oklch(0.24 0.04 264);
+
+  --secondary: oklch(0.95 0.012 85);
+  --secondary-foreground: oklch(0.28 0.03 264);
+  --muted: oklch(0.95 0.012 85);
+  --muted-foreground: oklch(0.5 0.02 264);
+  --accent: oklch(0.93 0.02 80);
+  --accent-foreground: oklch(0.24 0.04 264);
+
+  --destructive: oklch(0.58 0.21 25);
+  --border: oklch(0.88 0.015 80);
+  --input: oklch(0.9 0.012 80);
+  --ring: oklch(0.78 0.15 78);
+
+  /* Brand */
+  --gold: oklch(0.74 0.15 78);
+  --gold-foreground: oklch(0.24 0.04 264);
+  --ink: oklch(0.22 0.03 264);
+  --gain: oklch(0.55 0.14 152);
+  --loss: oklch(0.55 0.2 25);
+
+  /* Charts */
+  --chart-1: oklch(0.74 0.15 78);   /* gold */
+  --chart-2: oklch(0.55 0.16 252);  /* sapphire */
+  --chart-3: oklch(0.6 0.15 152);   /* emerald */
+  --chart-4: oklch(0.62 0.2 16);    /* ruby */
+  --chart-5: oklch(0.62 0.18 318);  /* amethyst */
+
+  --sidebar: oklch(0.99 0.004 85);
+  --sidebar-foreground: oklch(0.22 0.03 264);
+  --sidebar-primary: oklch(0.78 0.15 78);
+  --sidebar-primary-foreground: oklch(0.24 0.04 264);
+  --sidebar-accent: oklch(0.95 0.012 85);
+  --sidebar-accent-foreground: oklch(0.24 0.04 264);
+  --sidebar-border: oklch(0.88 0.015 80);
+  --sidebar-ring: oklch(0.78 0.15 78);
 }
 
+/* ------------------------------------------------------------------ */
+/*  DARK — "The Vault": deep navy-ink, brass & gold                   */
+/* ------------------------------------------------------------------ */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: oklch(0.19 0.025 264);
+  --foreground: oklch(0.95 0.01 85);
+
+  --card: oklch(0.23 0.028 264);
+  --card-foreground: oklch(0.95 0.01 85);
+  --popover: oklch(0.21 0.028 264);
+  --popover-foreground: oklch(0.95 0.01 85);
+
+  --primary: oklch(0.83 0.15 82);
+  --primary-foreground: oklch(0.2 0.03 264);
+
+  --secondary: oklch(0.28 0.03 264);
+  --secondary-foreground: oklch(0.95 0.01 85);
+  --muted: oklch(0.28 0.03 264);
+  --muted-foreground: oklch(0.7 0.02 264);
+  --accent: oklch(0.31 0.035 264);
+  --accent-foreground: oklch(0.95 0.01 85);
+
+  --destructive: oklch(0.66 0.2 22);
+  --border: oklch(0.97 0.02 85 / 12%);
+  --input: oklch(0.97 0.02 85 / 14%);
+  --ring: oklch(0.83 0.15 82);
+
+  /* Brand */
+  --gold: oklch(0.84 0.15 82);
+  --gold-foreground: oklch(0.2 0.03 264);
+  --ink: oklch(0.16 0.025 264);
+  --gain: oklch(0.78 0.15 158);
+  --loss: oklch(0.7 0.18 22);
+
+  /* Charts */
+  --chart-1: oklch(0.84 0.15 82);   /* gold */
+  --chart-2: oklch(0.66 0.16 254);  /* sapphire */
+  --chart-3: oklch(0.78 0.15 158);  /* emerald */
+  --chart-4: oklch(0.7 0.19 16);    /* ruby */
+  --chart-5: oklch(0.72 0.16 318);  /* amethyst */
+
+  --sidebar: oklch(0.21 0.028 264);
+  --sidebar-foreground: oklch(0.95 0.01 85);
+  --sidebar-primary: oklch(0.84 0.15 82);
+  --sidebar-primary-foreground: oklch(0.2 0.03 264);
+  --sidebar-accent: oklch(0.31 0.035 264);
+  --sidebar-accent-foreground: oklch(0.95 0.01 85);
+  --sidebar-border: oklch(0.97 0.02 85 / 12%);
+  --sidebar-ring: oklch(0.84 0.15 82);
 }
 
 @layer base {
@@ -122,15 +167,178 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-feature-settings: "ss01", "cv01";
+  }
+  /* Headings carry the editorial serif voice */
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.015em;
+  }
+  /* Currency / data should feel like a financial ledger */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
   }
 }
 
+/* ------------------------------------------------------------------ */
+/*  Atmosphere — the vault never sits on a flat color                 */
+/* ------------------------------------------------------------------ */
+.vault-atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.dark .vault-atmosphere {
+  background:
+    radial-gradient(900px 600px at 12% -8%, oklch(0.84 0.15 82 / 0.1), transparent 60%),
+    radial-gradient(1000px 700px at 100% 0%, oklch(0.55 0.18 254 / 0.12), transparent 55%),
+    radial-gradient(800px 800px at 50% 120%, oklch(0.5 0.12 264 / 0.25), transparent 60%);
+}
+:root .vault-atmosphere {
+  background:
+    radial-gradient(900px 600px at 10% -10%, oklch(0.78 0.15 78 / 0.14), transparent 60%),
+    radial-gradient(900px 700px at 100% 0%, oklch(0.6 0.12 252 / 0.08), transparent 55%);
+}
+
+/* Fine film-grain texture layered over the glow */
+.vault-grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ------------------------------------------------------------------ */
+/*  Brand utilities                                                   */
+/* ------------------------------------------------------------------ */
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* Liquid-gold gradient text for hero figures */
+.text-treasure {
+  background: linear-gradient(
+    100deg,
+    oklch(0.92 0.11 92),
+    oklch(0.82 0.16 78) 45%,
+    oklch(0.7 0.15 64)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Hairline gold rule */
+.rule-gold {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--gold) 20%,
+    var(--gold) 80%,
+    transparent
+  );
+  opacity: 0.5;
+}
+
+/* Card that lifts and reveals a gold edge on hover */
+.vault-card {
+  position: relative;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.vault-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(160deg, oklch(0.85 0.15 82 / 0.35), transparent 45%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+.vault-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 40px -18px oklch(0.1 0.03 264 / 0.55);
+}
+.vault-card:hover::before {
+  opacity: 1;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Motion — one orchestrated reveal on load beats scattered fidgets  */
+/* ------------------------------------------------------------------ */
+@keyframes vault-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.reveal {
+  opacity: 0;
+  animation: vault-reveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.reveal-1 { animation-delay: 0.04s; }
+.reveal-2 { animation-delay: 0.1s; }
+.reveal-3 { animation-delay: 0.16s; }
+.reveal-4 { animation-delay: 0.22s; }
+.reveal-5 { animation-delay: 0.28s; }
+.reveal-6 { animation-delay: 0.34s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    animation: none;
+    opacity: 1;
+  }
+  .vault-card:hover {
+    transform: none;
+  }
+}
+
+/* Refined scrollbar to match the vault */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+  background-clip: content-box;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Logo — the chunky vault wordmark, refined                         */
+/* ------------------------------------------------------------------ */
 .logo-text {
   font-family: var(--font-lilita);
-  color: #FFE234;
-  -webkit-text-stroke: 3.5px #0D1B2A;
+  color: #ffe234;
+  -webkit-text-stroke: 3px #0d1b2a;
   paint-order: stroke fill;
-  text-shadow: 3px 4px 0 rgba(13, 27, 42, 0.5);
-  line-height: 1;
+  text-shadow: 2px 3px 0 rgba(13, 27, 42, 0.45);
+  line-height: 0.92;
   display: block;
+  letter-spacing: 0.01em;
 }

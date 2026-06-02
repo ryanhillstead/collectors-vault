@@ -42,20 +42,20 @@ function PerformerRow({ item }: { item: PerformerData }) {
   return (
     <Link
       href={`/collection/${item.id}`}
-      className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-muted/50"
+      className="flex items-center justify-between gap-3 rounded-lg border border-border/60 p-3 transition-colors hover:border-gold/30 hover:bg-accent/50"
     >
-      <div className="flex items-center gap-3">
+      <div className="flex min-w-0 items-center gap-3">
         <ItemImage src={item.imageUrl} alt={item.name} size="sm" />
-        <div>
-          <p className="text-sm font-medium">{item.name}</p>
+        <div className="min-w-0">
+          <p className="truncate text-sm font-medium">{item.name}</p>
           <CategoryBadge category={item.category} />
         </div>
       </div>
-      <div className="text-right">
-        <p className={`text-sm font-semibold ${isPositive ? "text-green-600" : "text-red-600"}`}>
+      <div className="shrink-0 text-right">
+        <p className={`tnum text-sm font-semibold tabular-nums ${isPositive ? "text-gain" : "text-loss"}`}>
           {isPositive ? "+" : ""}{formatCurrency(item.gainLoss)}
         </p>
-        <p className={`text-xs ${isPositive ? "text-green-600" : "text-red-600"}`}>
+        <p className={`tnum text-xs tabular-nums ${isPositive ? "text-gain" : "text-loss"}`}>
           {isPositive ? "+" : ""}{item.gainLossPercent.toFixed(1)}%
         </p>
       </div>
